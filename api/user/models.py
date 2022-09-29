@@ -13,6 +13,7 @@ class CustomUser(AbstractBaseUser):
 
     # marking this as None as we would not be signing-in using username but rather using email.
     # # In django default sign-in uses Username to sign in,but we will be using Email for other user to sign-in.
+
     username = None
     USERNAME_FIELD = 'email'  # username field will be validated now by email
     REQUIRED_FILEDS =[]

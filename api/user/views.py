@@ -22,49 +22,48 @@ def generate_session_token(length=10):
 # --------------------------------------------------------------------------------------------------------------------
 @csrf_exempt       # used as we will be doing sign-up from other origin request.
 def sign_in(request):
-    if not request.method == "POST":
-        return JsonResponse({"error": "Send a post request with valid parameter only"})
+    if not request.method == 'POST':
+        return JsonResponse({'error': 'Send a post request with valid parameter only'})
 
-    username = request.POST["email"]
-    password = request.POST["password"]
+    username= request.POST['email']
+    password= request.POST['password']
 
-    # validation part
-    if not re.match("^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", username):
-        return JsonResponse({"error": "Enter a valid mail"})
+# validation part
+    if not re.match("^([\w\.\-_]+)?\w+@[\w-_]+(\.\w+){1,}$",username):
+        return JsonResponse({'error':"Enter a valid mail"})
 
-    if len(password) < 3:
-        return JsonResponse({"error": "Password need to be alteast of 5 Characters "})
+    if password.len() < 5:
+        return JsonResponse({'error':'Password need to be alteast of 5 Characters '})
 
-    # Grabbing user model using get_user_model and thru this we will try to grab the user from DB and match its password and other stuff.
+# Grabbing user model using get_user_model and thru this we will try to grab the user from DB and match its password and other stuff.
 
-    UserModel = get_user_model()
+    UserModel= get_user_model()
 
     try:
-        user = UserModel.objects.get(email=username)
+        user= UserModel.objects.get(email= username)
 
         if user.check_password(password):
-            usr_dict = UserModel.objects.filter(email=username).values().first()
-            usr_dict.pop(
-                "password"
-            )  # password is popped-off here as we do not want password to go further to front-end.
+            usr_dict= UserModel.objects.filter(email=username).values()
+            usr_dict.pop('password')  # password is popped-off here as we do not want password to go further to front-end.
 
-            # Next we will check if there is any session token for this user or not, if it is there that means user is already logged in
+    # Next we will check if there is any session token for this user or not, if it is there that means user is already logged in
 
-            if user.session_token != "0":
-                user.session_token = "0"
+            if user.session_token != 0:
+                user.session_token=0
                 user.save()
-                return JsonResponse({"error": "Previous session exists!"})
+                return JsonResponse({'error': 'Previous Session exists'})
 
-            token = generate_session_token()
-            user.session_token = token
-            user.save()
-            login(request, user)
-            return JsonResponse({"token": token, "user": usr_dict})
+                token =generate_session_token()
+                user.session_token= token
+                user.save()
+                login(request,user)
+                return JsonResponse({'token':token,'user':usr_dict})
         else:
-            return JsonResponse({"error": "Invalid Password"})
+            return JsonResponse({'error': "Invalid Password"})
+
 
     except UserModel.DoesNotExist:
-        return JsonResponse({"error": "Invalid Email"})
+        return JsonResponse({'error':"Invalid Email"})
 
 # ----------------------------------------------------------------------------------------------------------------
 def signout(request,id):

@@ -16,10 +16,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 # sanitisation(security) if password will be handled in views part.
 # Below code is to make sure if password field is not empty.
         if password is not None:
-            if len(password) < 3:
-                raise serializers.ValidationError(
-                    "Password needs to be at least of 3 char "
-                )
             instance.set_password(password)
         instance.save()
         return instance
