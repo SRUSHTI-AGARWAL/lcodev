@@ -11,12 +11,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 
-# here 2 modules are being imported, both are used for building paths purpose.
+# here 2 modules are being imported, both are used for the purpose of building paths.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # this path is using pathlib module
-
 
 # BASE_DIR= os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # this path is using os module
@@ -25,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# SECURITY WARNING: keep the secret key used in production secret while deploying on server  !
 SECRET_KEY = 'django-insecure-+&-s46acx@c-q&=amfc#+@d_wv&t-0)=3%sct-*)3f35wmy6-='
 # SECURITY WARNING: don't run with debug turned on in production!
 
@@ -48,6 +47,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'api',
     'api.category',
+    'api.product',
+    'api.user',
+    # 'api.order',
 ]
 # ---------------------------------------------------------------------------------------
 MIDDLEWARE = [
@@ -67,7 +69,7 @@ ROOT_URLCONF = 'ecomm.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates-telusko')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,6 +92,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'NAME': 'telusko',
+    #     to access the postgresql DB we need to specify credentials as well.
+    #     'USER': 'postgres',
+    #     'PASSWORD': '1234',
+    #     'HOST': 'localhost'  # We also need to specify the IP address of machine on which DB might exist, as in our network the B mught exist on different machine.
+    #     Here the machine is localhost only.
+
     }
 }
 # ----------------------------------------------------------------------------------------
@@ -110,7 +119,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+
+
+
 ]
+
 
 # ---------------------------------------------------------------------------------------------
 # Internationalization
@@ -128,12 +141,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
-MEDIA_URL = '/media/'     # media variable created, similar to static as above
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL='/media/'     # media variable created for images, similar to static as above
+MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
 
 CORS_ORIGIN_ALLOW_ALL = True
+AUTH_USER_MODEL = 'user.CustomUser'
+# syntax is as below : # as we are writing custom user model so this needs to be mentioned.
+# AUTH_USER_MODEL = 'YourAppName.YourClassName'
+# Error generated if not written: Reverse accessor for 'auth.User.groups' clashes with reverse accessor for 'user.CustomUser.groups'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -147,6 +165,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',     #to provide custom signup
     ]
 }

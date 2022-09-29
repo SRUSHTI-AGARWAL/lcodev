@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Category(models.Model):
+
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -9,7 +10,7 @@ class Category(models.Model):
 
 
 
-# This constructor is created to diplay name instead of Category object 1 and object 2 in admin panel
+# This constructor is created to display name instead of Category object 1 and object 2 in admin panel
 
     def __str__(self):
         return self.name
@@ -20,6 +21,3 @@ class Category(models.Model):
 
 #auto_now does exactlythe same, but user for updating the value as this field of updated_at will change
 # every now and then based on the data that we enter and update in the admin panel.
-
-
-

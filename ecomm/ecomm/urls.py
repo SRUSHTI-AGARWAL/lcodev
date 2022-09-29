@@ -19,20 +19,19 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),     # urls for handling admin panel
 
     #todo Adding urls for django REST framework
     path('api-auth/',include('rest_framework.urls')),
+    # path(r'^api-auth/', include('rest_framework.urls')),
 
     # adding path for api also. Though only api can handle the request but we will be creating api.urls to provide
     # access to handle further url requests so creating api.urls file.
     
-    path('api/',include('api.urls')),
-    
+    path('api/',include('api.urls')),    #url for handling api app
 ]
 # this is the general syntax and includes boilerplate code.
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
 # mentioning link(url) for media so it is accessible.Just another URL pattern
-

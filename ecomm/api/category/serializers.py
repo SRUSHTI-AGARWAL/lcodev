@@ -3,11 +3,9 @@ from .models import Category
 # from rest_framework.renderers import JSONRenderer
 
 
-
-
-class CategorySerializer(serializers.Serializer):
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model=  Category
-        field= ('name','description')
+        model= Category
+        fields = ('name','description')
 
 
