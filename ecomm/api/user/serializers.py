@@ -15,19 +15,18 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 # sanitisation(security) if password will be handled in views part.
 # Below code is to make sure if password field is not empty.
-        if (password is not None) and (len(password)>5):
+        if password is not None:
+            if len(password)<3:
+                raise serializers.ValidationError("Password needs to be atleast of 3 character")
             instance.set_password(password)
-            instance.is_staff=False
-            instance.is_superuser= False
-        else: print("Password too short")
+            # instance.is_superuser= False # to create the restriction of creating superuser
         instance.save()
-
         return instance
 
     # validated data is a key-value pair
     def update(self, instance, validated_data): #instance will always be given in update, we just need to extract.
         for attr,value in validated_data.items():
-            if attr == 'password':     # if attribute says that you want to update the password
+            if attr== 'password':     # if attribute says that you want to update the password
                 instance.set_password(value)
             else:
                 setattr(instance,attr,value)
@@ -44,5 +43,3 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 #       # Previously we were customising all the fields that were present in the model.
 # Here we have inherited a class and that class has some methods defined previously, so we need to serialize that data too.
 # write_only id is the property to the password setting it True to be only writable.
-
-

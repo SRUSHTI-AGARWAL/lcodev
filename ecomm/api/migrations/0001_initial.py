@@ -23,3 +23,8 @@ class Migration(migrations.Migration):
         migrations.RunPython(seed_data),
         ]
 
+#
+# todo >why 0001_initial only in "api-migrations" and not in any other app?
+#
+# because api is parent folder and 0001_migrations is present in all other apps which are generated
+# automatically when we run migrations but we added one manually to control fields of django superuser.

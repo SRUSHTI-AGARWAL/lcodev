@@ -3,6 +3,7 @@ from .models import Order
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model= order
-        fields = object.__all__
+        model= Order
+        fields = ['user',]
+
         #todo add product and quantity

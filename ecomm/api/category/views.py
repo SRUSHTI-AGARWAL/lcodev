@@ -8,8 +8,8 @@ from .models import Category
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all().order_by('name')
-
+    serializer_class = CategorySerializer
 # queryset determines, what is the data we are bringing from DB and based on the serializer we have written, that data will be converted
 # to JSON
-    serializer_class = CategorySerializer
+
 

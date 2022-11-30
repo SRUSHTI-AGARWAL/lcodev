@@ -22,19 +22,18 @@ def generate_session_token(length=10):
 # --------------------------------------------------------------------------------------------------------------------
 @csrf_exempt       # used as we will be doing sign-up from other origin request.
 def sign_in(request):
-    if not request.method == 'POST':
-        return JsonResponse({'error': 'Send a post request with valid parameter only'})
+    if not request.method == "POST":
+        return JsonResponse({"error": "Send a post request with valid parameter only"})
 
-    username = request.POST['email']
-    password = request.POST['password']
+    username= request.POST["email"]
+    password= request.POST["password"]
 
 # validation part
+    if not re.match("^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$",username):
+        return JsonResponse({"error" : "Enter a valid mail"})
 
-    if not re.match("^([\w\.\-_]+)?\w+@[\w-_]+(\.\w+){1,}$",username):
-        return JsonResponse({'error':"Enter a valid mail"})
-
-    if password.len() < 5:
-        return JsonResponse({'error':'Password need to be alteast of 5 Characters '})
+    if len(password) < 3:
+        return JsonResponse({"error":"Password need to be alteast of 3 Characters "})
 
 # Grabbing user model using get_user_model and thru this we will try to grab the user from DB and match its password and other stuff.
 
@@ -44,49 +43,52 @@ def sign_in(request):
         user= UserModel.objects.get(email= username)
 
         if user.check_password(password):
-            usr_dict= UserModel.objects.filter(email=username).values()
+            usr_dict= UserModel.objects.filter(email=username).values().first()
             usr_dict.pop('password')  # password is popped-off here as we do not want password to go further to front-end.
 
     # Next we will check if there is any session token for this user or not, if it is there that means user is already logged in
 
-            if user.session_token != 0:
-                user.session_token=0
+            if user.session_token != "0":
+                user.session_token="0"
                 user.save()
-                return JsonResponse({'error': 'Previous Session exists'})
+                return JsonResponse({"error": "Previous Session exists"})
 
-                token =generate_session_token()
-                user.session_token= token
-                user.save()
-                login(request,user)
-                return JsonResponse({'token':token,'user':usr_dict})
+            token =generate_session_token()
+            user.session_token= token
+            user.save()
+            login(request,user)
+            return JsonResponse({"token":token,"user":usr_dict})
         else:
-            return JsonResponse({'error': "Invalid Password"})
+            return JsonResponse({"error": "Invalid Password"})
 
 
     except UserModel.DoesNotExist:
-        return JsonResponse({'error':"Invalid Email"})
+        return JsonResponse({"error":"Invalid Email"})
 
 # ----------------------------------------------------------------------------------------------------------------
+@csrf_exempt
 def signout(request,id):
 
 #todo check for logout() placements at different places.
 
     UserModel = get_user_model()
 # todo here
-
+    logout(request)
     try:
         user= UserModel.objects.get(pk=id)
-        user.session_token='0'
+        user.session_token= "0"
+        user.save()
+
     except UserModel.DoesNotExist():
-        return JsonResponse({'error':'Invalid user ID'})
+        return JsonResponse({"error":'Invalid user ID'})
 # todo here
-    logout(request)
-    return JsonResponse({'success': 'Logout Success'})
+
+    return JsonResponse({"success": "Logout Success"})
 
 
 # Writing Viewsets
 class UserViewset(viewsets.ModelViewSet):
-    permission_classes_by_action = {'create':[AllowAny]}    # here we are creating object so if someone creates an account or have the create, then give them a list of Allowany
+    permission_classes_by_action = {"create":[AllowAny] }    # here we are creating object so if someone creates an account or have the create, then give them a list of Allowany
     queryset = CustomUser.objects.all().order_by('id')
     serializer_class = UserSerializer
 

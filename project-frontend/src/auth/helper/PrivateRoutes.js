@@ -1,0 +1,1 @@
+// configuration for routes which are not accessible without authentication, will be done here 
