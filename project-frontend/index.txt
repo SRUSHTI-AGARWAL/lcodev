@@ -1,1 +1,2 @@
 
+This is the Front-end part of the Django-React project, I am learning with Hitesh Sir.
