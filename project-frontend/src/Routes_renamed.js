@@ -8,7 +8,7 @@ import App from './App';
 // import reportWebVitals from './reportWebVitals';
 // Browser router is responsible for handling multiple URL Visits.
 // using ES6 syntax to create routes
-
+ 
 export default function Routes_renamed()
 {
     
