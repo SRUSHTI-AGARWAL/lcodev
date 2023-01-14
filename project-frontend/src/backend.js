@@ -1,7 +1,7 @@
 // creating a variable that provides a link to the envir. variables.
 
 
-export const API = process.env.REACT-APP-BACKEND;    
+export const API = process.env.REACT_APP_BACKEND;    
 
 
 // process is already installed in react. 

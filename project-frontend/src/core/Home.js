@@ -2,15 +2,19 @@
 
 import React , {useState, useEffect} from 'react' ;
 import { getProducts } from './helper/coreapicalls';
+import Base from './Base';
+import '../style.css'
+import Card from './Card';
 
-export default function Home(){
+export default function Home() {
 // what we will call the box: products, how we will put data inside
+
     const [products, setProducts] = useState([])   // initially it will be managed by userState and products will be empty array. 
     const [error,setError]= useState(false) //initially as there is no error so setting value as False. 
 
     const LoadAllProducts = ()  => {
-        getProducts()
-        .then(data => {    // using callback
+            getProducts()
+            .then((data) => { // using callback
 
             if (data.error) {
 
@@ -33,8 +37,8 @@ export default function Home(){
     
      return(
 
-<div> 
-    <h1> Hello ! ,This is Home Component</h1>
+<Base title='Home Page' description='Welcome to My T shirt Store'> 
+    <h1> Hello ! This is Home Component</h1>
 
     {/* looping thru array to access any data */}
     
@@ -42,13 +46,14 @@ export default function Home(){
     { products.map((product,index) => {   {/*callback function */}
         return(
 
-            <div key= {index}>
-                <h1> {product.name}</h1>
+            <div key= {index} className='col-4 mb-4'>
+                <Card product={product}/>
             </div>
         );
         })}
         </div>
-</div>
+
+</Base>
 
     );
 } 

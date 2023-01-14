@@ -19,7 +19,7 @@ import React from 'react';
             alt= ''
             />
             
-            <h1> This is image helper file </h1>
+            
         </div>
     )
 }
